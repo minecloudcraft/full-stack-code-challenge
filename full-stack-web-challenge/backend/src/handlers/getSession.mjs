@@ -105,7 +105,11 @@ export const getAllSessions = async (req, res) => {
   try {
     const command = new ScanCommand(params);
     const data = await client.send(command);
-    res.status(200).json(data.Items.map((item) => unmarshall(item)));
+    if (data.Items) {
+      res.status(200).json(data.Items.map((item) => unmarshall(item)));
+    } else {
+      res.status(404).json({ error: "No sessions found" });
+    }
   } catch (error) {
     console.error("Error retrieving sessions:", error);
     res.status(500).json({ error: "Could not retrieve game sessions" });

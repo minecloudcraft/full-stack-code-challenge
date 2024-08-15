@@ -10,3 +10,9 @@ aws dynamodb create-table \
  --key-schema AttributeName=SessionId,KeyType=HASH \
  --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 \
  --region us-west-1
+
+### DynamoDB Local
+
+Se estiver usando o DynamoDB Local, você pode usar a AWS CLI apontando para o endpoint local:
+
+aws dynamodb scan --table-name GameSessions --endpoint-url http://localhost:8000
