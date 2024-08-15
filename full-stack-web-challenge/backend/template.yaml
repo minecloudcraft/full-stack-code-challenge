@@ -1,0 +1,40 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: "AWS::Serverless-2016-10-31"
+Description: "AWS SAM Template for a game session API"
+
+Globals:
+  Function:
+    Timeout: 30
+
+Resources:
+  GameSessionFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: app.handler
+      Runtime: nodejs18.x
+      CodeUri: ./backend
+      Events:
+        CreateSession:
+          Type: Api
+          Properties:
+            Path: /sessions
+            Method: post
+        GetSession:
+          Type: Api
+          Properties:
+            Path: /sessions/{sessionId}
+            Method: get
+
+  GameSessionsTable:
+    Type: "AWS::DynamoDB::Table"
+    Properties:
+      TableName: GameSessions
+      AttributeDefinitions:
+        - AttributeName: SessionId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: SessionId
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
