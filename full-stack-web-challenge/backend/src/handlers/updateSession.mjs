@@ -63,7 +63,7 @@ const tableName = process.env.TABLE_NAME || "GameSessions";
 
 export const updateSession = async (req, res) => {
   const { sessionId } = req.params;
-  const { nomeDoHost, jogadores, mapa, modo } = req.body;
+  const { hostname, players, map, mode } = req.body;
 
   if (!sessionId) {
     return res.status(400).json({ error: "SessionId is required" });
@@ -92,19 +92,19 @@ export const updateSession = async (req, res) => {
       TableName: tableName,
       Key: marshall({ SessionId: sessionId }),
       UpdateExpression:
-        "set #host = :host, #jogadores = :jogadores, #mapa = :mapa, #modo = :modo, #updatedAt = :updatedAt",
+        "SET #hostname = :hostname, #players = :players, #map = :map, #mode = :mode, #updatedAt = :updatedAt",
       ExpressionAttributeNames: {
-        "#host": "NomeDoHost",
-        "#jogadores": "Jogadores",
-        "#mapa": "Mapa",
-        "#modo": "Modo",
+        "#hostname": "Hostname",
+        "#players": "Players",
+        "#map": "Map",
+        "#mode": "Mode",
         "#updatedAt": "UpdatedAt",
       },
       ExpressionAttributeValues: marshall({
-        ":host": nomeDoHost || existingItem.NomeDoHost,
-        ":jogadores": jogadores || existingItem.Jogadores,
-        ":mapa": mapa || existingItem.Mapa,
-        ":modo": modo || existingItem.Modo,
+        ":hostname": hostname || existingItem.Hostname,
+        ":players": players || existingItem.Players,
+        ":map": map || existingItem.Map,
+        ":mode": mode || existingItem.Mode,
         ":updatedAt": new Date().toISOString(),
       }),
       ReturnValues: "UPDATED_NEW",
@@ -116,7 +116,10 @@ export const updateSession = async (req, res) => {
 
     console.log("Update result:", updateResult);
 
-    res.status(200).json({ message: "Session updated successfully" });
+    res.status(200).json({
+      message: "Session updated successfully",
+      data: updateResult.Attributes,
+    });
   } catch (error) {
     console.error("Error in updateSession:", error);
     res

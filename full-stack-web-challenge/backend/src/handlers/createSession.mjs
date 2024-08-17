@@ -11,23 +11,23 @@
  *           schema:
  *             type: object
  *             properties:
- *               nomeDoHost:
+ *               hostname:
  *                 type: string
- *                 example: "Servidor Principal"
- *               jogadores:
+ *                 example: "777 unknown"
+ *               players:
  *                 type: integer
- *                 example: 10
- *               mapa:
+ *                 example: 24
+ *               map:
  *                 type: string
- *                 example: "Mapa do Deserto"
- *               modo:
+ *                 example: "Dust 2"
+ *               mode:
  *                 type: string
- *                 example: "Competitivo"
+ *                 example: "Competitive"
  *             required:
- *               - nomeDoHost
- *               - jogadores
- *               - mapa
- *               - modo
+ *               - hostname
+ *               - players
+ *               - map
+ *               - mode
  *     responses:
  *       201:
  *         description: Session created successfully
@@ -91,9 +91,9 @@ export const createSession = async (req, res) => {
   await createTableIfNotExists(tableName);
   console.log("Received request:", req.body);
   const sessionId = uuidv4();
-  const { nomeDoHost, jogadores, mapa, modo } = req.body;
+  const { hostname, players, map, mode } = req.body;
 
-  if (!nomeDoHost || !jogadores || !mapa || !modo) {
+  if (!hostname || !players || !map || !mode) {
     console.log("Missing required fields");
     return res.status(400).json({ error: "Missing required fields" });
   }
@@ -102,10 +102,10 @@ export const createSession = async (req, res) => {
     TableName: tableName,
     Item: marshall({
       SessionId: sessionId,
-      NomeDoHost: nomeDoHost,
-      Jogadores: jogadores,
-      Mapa: mapa,
-      Modo: modo,
+      Hostname: hostname,
+      Players: players,
+      Map: map,
+      Mode: mode,
       CreatedAt: new Date().toISOString(),
     }),
   };
@@ -113,10 +113,10 @@ export const createSession = async (req, res) => {
   try {
     await client.send(new PutItemCommand(params));
     console.log("Creating session with data:", {
-      nomeDoHost,
-      jogadores,
-      mapa,
-      modo,
+      hostname,
+      players,
+      map,
+      mode,
     });
 
     res.status(201).json({ SessionId: sessionId });

@@ -105,7 +105,8 @@ export const getAllSessions = async (req, res) => {
   try {
     const command = new ScanCommand(params);
     const data = await client.send(command);
-    if (data.Items) {
+    if (data.Items && data.Items.length > 0) {
+      // Verifique se Items não está vazio
       res.status(200).json(data.Items.map((item) => unmarshall(item)));
     } else {
       res.status(404).json({ error: "No sessions found" });
