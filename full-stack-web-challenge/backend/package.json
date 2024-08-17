@@ -1,0 +1,46 @@
+{
+  "name": "backend",
+  "description": "Backend for the frontend react-vite",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@aws-sdk/lib-dynamodb": "^3.631.0",
+    "@vendia/serverless-express": "^4.12.6",
+    "axios": "^1.7.4",
+    "backend": "file:",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "@aws-sdk/client-dynamodb": "^3.632.0",
+    "@aws-sdk/util-dynamodb": "^3.632.0",
+    "aws-sdk-client-mock": "^2.2.0",
+    "express": "^4.19.2",
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0",
+    "uuid": "^10.0.0"
+  },
+  "scripts": {
+    "create-table": "node src/db/createTable.mjs",
+    "start": "nodemon app.js",
+    "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --watch",
+    "test:cov": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --coverage"
+  },
+  "jest": {
+    "testMatch": [
+      "**/__tests__/**/*.[jt]s?(x)",
+      "**/?(*.)+(spec|test).[jt]s?(x)",
+      "**/__tests__/**/*.mjs?(x)",
+      "**/?(*.)+(spec|test).mjs?(x)"
+    ],
+    "moduleFileExtensions": [
+      "mjs",
+      "js"
+    ]
+  },
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
